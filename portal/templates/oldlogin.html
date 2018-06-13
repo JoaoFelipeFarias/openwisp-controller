@@ -1,0 +1,35 @@
+{% extends 'loginbase.html' %}
+{% block content %}
+
+<script src='/static/js/jquery-3.2.1.js'></script>
+
+<input type="hidden" id="controller_ip" value="{{controller_ip}}">
+<input type="hidden" id="redirect_url" value="{{redirect_url}}">
+
+{% if controller_model_name %}
+<!--  {% if controller_model_name == 'swarm' %}
+
+      <script src='/static/js/PortalSwarm.js'></script>
+  {% elif controller_model_name == 'coovachilli' %}-->
+    <script src='/static/js/ChilliLibrary.js'></script>
+    <script src='/static/js/PortalChilli.js'></script>
+  <!--{% endif %}-->
+{% endif %}
+
+
+  <h2>Login</h2>
+  <form id='login-form' method='post'>
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button name='accept' type="button" onclick='verify_login()'>Login</button>
+  </form>
+
+  <form id='controller-form' method='post' action='http://172.22.254.254:8002?zone=captive_analysis'>
+  </form>
+
+    <button name="hello" type="button" onclick='login_coova()'>COOVA LOGIN</button>
+    <button name="hello" type="button" onclick='logout_coova()'>COOVA LOGOUT</button>
+
+    <p>Sign up<a href="/portal/sign_up/" class="text-danger m-l-5"><b>Sign In</b></a></p>
+
+{% endblock %}

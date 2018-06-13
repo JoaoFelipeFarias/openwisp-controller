@@ -6,7 +6,7 @@ BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 DATABASES = {
     'default': {
@@ -49,7 +49,9 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework_gis',
     # channels
-    'channels'
+    'channels',
+    'portal',
+    'radius',
 ]
 
 EXTENDED_APPS = ('django_netjsonconfig', 'django_x509', 'django_loci',)
@@ -118,6 +120,8 @@ ACCOUNT_LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 
 # during development only
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+SPATIALITE_LIBRARY_PATH = 'mod_spatialite' 
 
 # local settings must be imported before test runner otherwise they'll be ignored
 try:

@@ -1,0 +1,58 @@
+config chilli
+#option disabled 1
+
+# RADIUS account details
+option radiusserver1 192.168.15.8
+option radiusserver2 192.168.15.8
+option radiusauthport 1812
+option radiusacctport 1813
+option radiusnasid   "jf"
+option radiussecret  "testing123"
+option nasip 192.168.1.25 # --> ALTERAR
+option defsessiontimeout 14460
+option defidletimeout 3600
+
+# WISPr settings
+option locationname   "Recife"
+option radiuslocationname  "Elcoma,P&D" # --> ALTERAR
+option radiuslocationid  "isocc=br,cc=55,ac=81,network=Elcoma-chilli"
+option ssid "Elcoma-Coova-Chilli-AC"
+
+# LAN interface to put the hotspot
+option dhcpif    br-lan
+
+# DNS
+option dns1   8.8.8.8
+option dns2   192.168.1.93
+
+# Tunnel and Subnet
+option tundev    'tun1'
+option net   192.168.180.0/22
+option uamlisten  192.168.182.1
+option lease   86400
+option leaseplus  600
+
+# UAM parameters
+option uamserver  "http://192.168.15.8/portal/login/?controller_id=61780bfc9ec647e2a8a869acadcaf224"
+#option uamsecret  "testing123"
+option uamport   3990
+option uamuiport   4990
+option uamanydns  1
+#option uamaliasip   1.0.0.1
+option uamaliasname   login
+#option uamlogoutip   1.0.0.0
+option nouamsuccess  1
+
+# Hosts walled garden
+option uamallowed "192.168.15.8"
+
+# Domains walled garden
+option uamdomain "maralco.com.br,.googleapis.com,fonts.google.com, fonts.gstatic.com"
+
+# Debug
+option swapoctets  1
+option interval   3600
+
+# Chilli firewall rules
+option ipup '/etc/chilli/up.sh'
+option ipdown '/etc/chilli/down.sh'
