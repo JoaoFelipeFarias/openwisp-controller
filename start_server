@@ -1,0 +1,10 @@
+uwsgi --socket :8002 \
+--module tests.wsgi \
+--honour-stdin \
+--processes 2 \
+--threads 4 \
+--master \
+--buffer-size 8192 \
+--py-autoreload=3 \
+--vacuum
+
