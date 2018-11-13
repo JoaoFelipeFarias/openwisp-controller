@@ -8,13 +8,11 @@ https://docs.djangoproject.com/en/2.0/howto/deployment/wsgi/
 """
 
 import os
+import sys
 
 from django.core.wsgi import get_wsgi_application
 
-if os.environ['PFSENSE_CAPTIVE_ENVIRONMENT'] == 'DEV':
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tests.settings")
-else:
-    os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tests.settings")
+os.environ.setdefault("DJANGO_SETTINGS_MODULE", "tests.settings")
 
 
 
