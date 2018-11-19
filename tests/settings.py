@@ -12,8 +12,21 @@ DATABASES = {
     'default': {
         'ENGINE': 'django.contrib.gis.db.backends.spatialite',
         'NAME': 'openwisp-controller.db',
-    }
+    },
+    # 'coova': {
+    #
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'autonomous-ap',
+    #     'USER': 'admin',
+    #     'PASSWORD': 'admin',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432',
+    # },
 }
+#added this code to try db admin to work 19/11 16:31
+# AUTHENTICATION_BACKENDS = ('django.contrib.auth.backends.ModelBackend',)
+# SESSION_ENGINE = 'django.contrib.sessions.backends.db'
+# SESSION_COOKIE_SECURE = False
 
 SECRET_KEY = 'fn)t*+$)ugeyip6-#txyy$5wf2ervc0d2n#h)qb)y5@ly$t*@w'
 
@@ -37,7 +50,7 @@ INSTALLED_APPS = [
     'openwisp_users',
     'openwisp_controller.pki',
     'openwisp_controller.config',
-    'openwisp_controller.geo',
+    'openwisp_controller.geo', #comentado tentando db funcionar 19/11 15:06
     # admin
     'django.contrib.admin',
     'django.forms',
@@ -75,7 +88,7 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'tests.urls'
 
 CHANNEL_LAYERS = {
     'default': {
@@ -118,13 +131,22 @@ EMAIL_PORT = '1025'  # for testing purposes
 LOGIN_REDIRECT_URL = 'admin:index'
 ACCOUNT_LOGOUT_REDIRECT_URL = LOGIN_REDIRECT_URL
 
+
+#ACCOUNT_EMAIL_VERIFICATION = 'optional'
 # during development only
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 
-SPATIALITE_LIBRARY_PATH = 'mod_spatialite' 
+SPATIALITE_LIBRARY_PATH = 'mod_spatialite'
+
+
+PARENT_PATH = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
+STATIC_ROOT = os.path.dirname(os.path.join(PARENT_PATH, 'static/'))
+print(STATIC_ROOT)
 
 # local settings must be imported before test runner otherwise they'll be ignored
 try:
     from local_settings import *
 except ImportError:
     pass
+
+

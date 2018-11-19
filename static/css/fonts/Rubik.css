@@ -1,0 +1,51 @@
+@font-face {
+	font-family: 'Rubik';
+	font-style: normal;
+	font-weight: 300;
+	src:
+		local('Rubik Light'),
+		local('Rubik-Light'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWHBXyIfDnIV7Fqj2md8WQ.eot */
+		url('Rubik_300.eot?#iefix') format('embedded-opentype'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWHBXyIfDnIV7Fqj2md8WY.woff */
+		url('Rubik_300.woff') format('woff'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWHBXyIfDnIV7Fqj2md8WA.woff2 */
+		url('Rubik_300.woff2') format('woff2'),
+		/* from https://fonts.gstatic.com/l/font?kit=iJWHBXyIfDnIV7Fqj2md8Wc&skey=30892a5a5aea46ae&v=v7#Rubik */
+		url('Rubik_300.svg#Rubik') format('svg'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWHBXyIfDnIV7Fqj2md8WU.ttf */
+		url('Rubik_300.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Rubik';
+	font-style: normal;
+	font-weight: 400;
+	src:
+		local('Rubik'),
+		local('Rubik-Regular'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWKBXyIfDnIV7nBrXg.eot */
+		url('Rubik_400.eot?#iefix') format('embedded-opentype'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWKBXyIfDnIV7nBrXo.woff */
+		url('Rubik_400.woff') format('woff'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWKBXyIfDnIV7nBrXw.woff2 */
+		url('Rubik_400.woff2') format('woff2'),
+		/* from https://fonts.gstatic.com/l/font?kit=iJWKBXyIfDnIV7nBrXs&skey=cee854e66788286d&v=v7#Rubik */
+		url('Rubik_400.svg#Rubik') format('svg'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWKBXyIfDnIV7nBrXk.ttf */
+		url('Rubik_400.ttf') format('truetype');
+}
+@font-face {
+	font-family: 'Rubik';
+	font-style: normal;
+	font-weight: 500;
+	src:
+		local('Rubik Medium'),
+		local('Rubik-Medium'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWHBXyIfDnIV7Eyjmmd8WQ.eot */
+		url('Rubik_500.eot?#iefix') format('embedded-opentype'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWHBXyIfDnIV7Eyjmmd8WY.woff */
+		url('Rubik_500.woff') format('woff'),
+		/* from https://fonts.gstatic.com/s/rubik/v7/iJWHBXyIfDnIV7Eyjmmd8WA.woff2 */
+		url('Rubik_500.woff2') format('woff2'),
+		/* from https://fonts.gstatic.com/l/font?kit=iJWHBXyIfDnIV7Eyjmmd8Wc&skey=46488a639fde60e&v=v7#Rubik */
+		url('Rubik_500.svg#Rubik') format('svg'),

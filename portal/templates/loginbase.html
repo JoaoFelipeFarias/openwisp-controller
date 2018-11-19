@@ -1,6 +1,8 @@
 <!DOCTYPE html>
 <html lang="en">
 
+{% load static %}
+
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -31,8 +33,10 @@
       {% if request.session.controller_model_name == 'swarm' %}
           <script src='/static/js/PortalSwarm.js'></script>
       {% elif request.session.controller_model_name == 'coovachilli' %}
-        <script src='/static/js/ChilliLibrary.js'></script>
-        <script src='/static/js/PortalChilli.js'></script>
+    <script>console.log(request.session.controller_model_name)</script>
+
+        <script src="{% static 'js/ChilliLibrary.js' %}"></script>
+        <script src="{% static 'js/PortalChilli.js' %}"></script>
 
 
       {% endif %}

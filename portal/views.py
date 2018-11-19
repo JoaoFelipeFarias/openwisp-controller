@@ -69,6 +69,7 @@ class PortalSignup(View):
 
     def post(self, request):
         form = SignupForm(request.POST)
+        print('post')
         print(form.is_valid())
         if form.is_valid():
             form.save()
@@ -156,7 +157,7 @@ class PortalLogin(View):
             else:
                 logger.warning('No controller was found for uuid: %s', query_params['controller_id'])
                 form = LoginForm()
-                return render(request, 'oldlogin.html', {'form': form})
+                return render(request, 'login.html', {'form': form})
         else:
             logger.error('No controller or MAC was included on login request query params')
             form = LoginForm()
@@ -164,6 +165,7 @@ class PortalLogin(View):
 
     def post(self, request):
         form = LoginForm(request.POST)
+        print('post boy')
         print(form)
         print(form.errors)
         if form.is_valid():

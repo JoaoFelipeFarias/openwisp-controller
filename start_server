@@ -1,4 +1,4 @@
-uwsgi --socket :8002 \
+uwsgi --socket :10001 \
 --module tests.wsgi \
 --honour-stdin \
 --processes 2 \
