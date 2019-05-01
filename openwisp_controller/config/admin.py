@@ -8,11 +8,11 @@ from django_netjsonconfig.base.admin import (AbstractConfigForm, AbstractConfigI
                                              AbstractTemplateAdmin, AbstractVpnAdmin, AbstractVpnForm,
                                              BaseForm)
 
-from openwisp_users.admin import OrganizationAdmin as BaseOrganizationAdmin
 from openwisp_users.models import Organization
-from openwisp_utils.admin import MultitenantOrgFilter, MultitenantRelatedOrgFilter
+from openwisp_users.multitenancy import MultitenantOrgFilter, MultitenantRelatedOrgFilter
+from openwisp_utils.admin import AlwaysHasChangedMixin
 
-from ..admin import AlwaysHasChangedMixin, MultitenantAdminMixin
+from ..admin import MultitenantAdminMixin
 from .models import Config, Device, OrganizationConfigSettings, Template, Vpn
 
 
@@ -20,10 +20,17 @@ class ConfigForm(AlwaysHasChangedMixin, AbstractConfigForm):
     class Meta(AbstractConfigForm.Meta):
         model = Config
 
-    def clean_templates(self):
+    def get_temp_model_instance(self, **options):
+        config_model = self.Meta.model
+        instance = config_model(**options)
+        device_model = config_model.device.field.related_model
         org = Organization.objects.get(pk=self.data['organization'])
-        self.cleaned_data['organization'] = org
-        return super(ConfigForm, self).clean_templates()
+        instance.device = device_model(
+            name=self.data['name'],
+            mac_address=self.data['mac_address'],
+            organization=org
+        )
+        return instance
 
 
 class ConfigInline(MultitenantAdminMixin, AbstractConfigInline):
@@ -36,10 +43,11 @@ class ConfigInline(MultitenantAdminMixin, AbstractConfigInline):
 class DeviceAdmin(MultitenantAdminMixin, AbstractDeviceAdmin):
     inlines = [ConfigInline]
     list_filter = [('organization', MultitenantOrgFilter),
-                   'config__backend',
                    ('config__templates', MultitenantRelatedOrgFilter),
                    'config__status',
                    'created']
+    if django_netjsonconfig_settings.BACKEND_DEVICE_LIST:
+        list_filter.insert(1, 'config__backend')
     list_select_related = ('config', 'organization')
 
     def _get_default_template_urls(self):
@@ -97,27 +105,20 @@ VpnAdmin.list_filter.insert(0, ('organization', MultitenantOrgFilter))
 VpnAdmin.list_filter.remove('ca')
 VpnAdmin.fields.insert(2, 'organization')
 
-
-class ConfigSettingsForm(AlwaysHasChangedMixin, forms.ModelForm):
-    pass
-
-
-class ConfigSettingsInline(admin.StackedInline):
-    model = OrganizationConfigSettings
-    form = ConfigSettingsForm
-
-
-class OrganizationAdmin(BaseOrganizationAdmin):
-    save_on_top = True
-    inlines = [ConfigSettingsInline] + BaseOrganizationAdmin.inlines
-
-
 admin.site.register(Device, DeviceAdmin)
 admin.site.register(Template, TemplateAdmin)
 admin.site.register(Vpn, VpnAdmin)
 
 
 if getattr(django_netjsonconfig_settings, 'REGISTRATION_ENABLED', True):
-    # add OrganizationConfigSettings inline to Organization admin
-    admin.site.unregister(Organization)
-    admin.site.register(Organization, OrganizationAdmin)
+    from openwisp_users.admin import OrganizationAdmin
+
+    class ConfigSettingsForm(AlwaysHasChangedMixin, forms.ModelForm):
+        pass
+
+    class ConfigSettingsInline(admin.StackedInline):
+        model = OrganizationConfigSettings
+        form = ConfigSettingsForm
+
+    OrganizationAdmin.save_on_top = True
+    OrganizationAdmin.inlines.insert(0, ConfigSettingsInline)

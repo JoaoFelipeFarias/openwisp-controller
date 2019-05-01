@@ -4,12 +4,12 @@ from django.contrib.gis.geos import Point
 from django.test import TestCase
 from django.urls import reverse
 
-from . import TestGeoMixin
 from ...config.models import Device
 from ..models import DeviceLocation, Location
+from . import TestGeoMixin
 
 
-class TestModels(TestGeoMixin, TestCase):
+class TestApi(TestGeoMixin, TestCase):
     object_model = Device
     location_model = Location
     object_location_model = DeviceLocation

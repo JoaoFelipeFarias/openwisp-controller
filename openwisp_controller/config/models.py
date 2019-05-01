@@ -1,9 +1,11 @@
 import uuid
 
+from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.encoding import python_2_unicode_compatible
 from django.utils.translation import ugettext_lazy as _
+from django_netjsonconfig import settings as app_settings
 from django_netjsonconfig.base.config import AbstractConfig, TemplatesThrough
 from django_netjsonconfig.base.config import TemplatesVpnMixin as BaseMixin
 from django_netjsonconfig.base.device import AbstractDevice
@@ -11,7 +13,7 @@ from django_netjsonconfig.base.tag import AbstractTaggedTemplate, AbstractTempla
 from django_netjsonconfig.base.template import AbstractTemplate
 from django_netjsonconfig.base.vpn import AbstractVpn, AbstractVpnClient
 from django_netjsonconfig.utils import get_random_key
-from django_netjsonconfig.validators import key_validator
+from django_netjsonconfig.validators import key_validator, mac_address_validator
 from sortedm2m.fields import SortedManyToManyField
 from taggit.managers import TaggableManager
 
@@ -27,7 +29,9 @@ class TemplatesVpnMixin(BaseMixin):
     def get_default_templates(self):
         """ see ``openwisp_controller.config.utils.get_default_templates_queryset`` """
         queryset = super(TemplatesVpnMixin, self).get_default_templates()
-        return get_default_templates_queryset(self.organization_id, queryset=queryset)
+        assert self.device
+        return get_default_templates_queryset(self.device.organization_id,
+                                              queryset=queryset)
 
     @classmethod
     def clean_templates_org(cls, action, instance, pk_set, **kwargs):
@@ -41,9 +45,10 @@ class TemplatesVpnMixin(BaseMixin):
             pk_list = [template.pk for template in templates]
             templates = template_model.objects.filter(pk__in=pk_list)
         # lookg for invalid templates
-        invalids = templates.exclude(organization=instance.organization)\
-                            .exclude(organization=None)\
+        invalids = templates.exclude(organization=instance.device.organization) \
+                            .exclude(organization=None) \
                             .values('name')
+
         if templates and invalids:
             names = ''
             for invalid in invalids:
@@ -67,15 +72,40 @@ class TemplatesVpnMixin(BaseMixin):
         super(TemplatesVpnMixin, cls).clean_templates(action, instance, templates, **kwargs)
 
 
+# if unique attribute for NETJSONCONFIG_HARDWARE_ID_OPTIONS is not explicitely mentioned,
+# consider it to be False
+if not getattr(settings, 'NETJSONCONFIG_HARDWARE_ID_OPTIONS', {}).get('unique'):
+    app_settings.HARDWARE_ID_OPTIONS.update({'unique': False})
+
+
 class Device(OrgMixin, AbstractDevice):
     """
     Concrete Device model
     """
+    name = models.CharField(max_length=64, unique=False, db_index=True)
+    mac_address = models.CharField(
+        max_length=17,
+        db_index=True,
+        unique=False,
+        validators=[mac_address_validator],
+        help_text=_('primary mac address')
+    )
+
     class Meta(AbstractDevice.Meta):
+        unique_together = (
+            ('name', 'organization'),
+            ('mac_address', 'organization'),
+            ('hardware_id', 'organization'),
+        )
         abstract = False
 
+    def get_temp_config_instance(self, **options):
+        c = super(Device, self).get_temp_config_instance(**options)
+        c.device = self
+        return c
 
-class Config(OrgMixin, TemplatesVpnMixin, AbstractConfig):
+
+class Config(TemplatesVpnMixin, AbstractConfig):
     """
     Concrete Config model
     """
@@ -94,11 +124,6 @@ class Config(OrgMixin, TemplatesVpnMixin, AbstractConfig):
 
     class Meta(AbstractConfig.Meta):
         abstract = False
-
-    def clean(self):
-        if not hasattr(self, 'organization') and self._has_device():
-            self.organization = self.device.organization
-        super(Config, self).clean()
 
 
 class TemplateTag(AbstractTemplateTag):
@@ -137,6 +162,7 @@ class Template(ShareableOrgMixin, AbstractTemplate):
 
     class Meta(AbstractTemplate.Meta):
         abstract = False
+        unique_together = (('organization', 'name'), )
 
     def clean(self):
         self._validate_org_relation('vpn')
@@ -192,7 +218,7 @@ class VpnClient(AbstractVpnClient):
         """
         sets the organization on the created client certificate
         """
-        cert.organization = self.vpn.organization
+        cert.organization = self.config.device.organization
         return cert
 
 
@@ -221,7 +247,7 @@ class OrganizationConfigSettings(models.Model):
 
     class Meta:
         verbose_name = _('Configuration management settings')
-        verbose_name_plural = _('Configuration management settings')
+        verbose_name_plural = verbose_name
 
     def __str__(self):
         return self.organization.name

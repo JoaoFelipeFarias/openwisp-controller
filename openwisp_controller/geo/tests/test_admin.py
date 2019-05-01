@@ -3,10 +3,10 @@ from django.test import TestCase
 from django.urls import reverse
 from django_loci.tests.base.test_admin import BaseTestAdmin
 
-from . import TestGeoMixin
 from ...config.models import Device
 from ...tests.utils import TestAdminMixin
 from ..models import DeviceLocation, FloorPlan, Location
+from . import TestGeoMixin
 
 
 class TestAdmin(TestAdminMixin, TestGeoMixin, BaseTestAdmin, TestCase):
@@ -99,9 +99,3 @@ class TestAdmin(TestAdminMixin, TestGeoMixin, BaseTestAdmin, TestCase):
                     data['inactive'].name,
                     data['fl3_inactive']]
         )
-
-    def test_floorplan_no_organization(self):
-        self._create_admin()
-        self._login()
-        r = self.client.get(reverse('admin:geo_floorplan_add'))
-        self.assertNotContains(r, 'organization')

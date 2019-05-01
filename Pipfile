@@ -1,0 +1,20 @@
+[[source]]
+verify_ssl = true
+url = "https://pypi.org/simple"
+name = "pypi"
+
+[packages]
+openwisp_controller = {path = ".", editable = true}
+
+[dev-packages]
+coverage = "*"
+coveralls = "*"
+isort = "*"
+flake8 = "*"
+mock = "*"
+
+[scripts]
+lint = "python -m flake8"
+isort = "python -m isort"
+test = "python runtests.py"
+install_dev = "sh install-dev.sh"
