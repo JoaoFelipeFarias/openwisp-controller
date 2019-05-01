@@ -140,8 +140,13 @@ SPATIALITE_LIBRARY_PATH = 'mod_spatialite'
 
 
 PARENT_PATH = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
-STATIC_ROOT = os.path.dirname(os.path.join(PARENT_PATH, 'static/'))
-print(STATIC_ROOT)
+# STATIC_ROOT = os.path.dirname(os.path.join(PARENT_PATH, 'static/'))
+# print(STATIC_ROOT)
+
+STATICFILES_DIRS = [
+
+    '/home/joao/tcc/openwisp-controller/static/',
+]
 
 # local settings must be imported before test runner otherwise they'll be ignored
 try:

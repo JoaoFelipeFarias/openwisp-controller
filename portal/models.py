@@ -19,7 +19,8 @@ class DeviceManager(models.Manager):
 
         if mac:
             mac = mac.replace('-', ':') #if there is a mac, replace the - used by coovachilli
-            device = self.filter(mac=mac, user_agent=user_agent)
+            device = self.filter(mac=mac)
+            print(device)
             if not device.exists():
                 self.create(mac=mac,
                         user_agent=user_agent)

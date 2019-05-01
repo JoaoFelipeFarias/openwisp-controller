@@ -29,18 +29,22 @@
     <input type="hidden" id="redirect_url" value="{{request.session.redirect_url}}">
     <input type="hidden" id="template_name" value="{{request.session.template_name}}">
 
-    {% if request.session.controller_model_name %}
-      {% if request.session.controller_model_name == 'swarm' %}
-          <script src='/static/js/PortalSwarm.js'></script>
-      {% elif request.session.controller_model_name == 'coovachilli' %}
-    <script>console.log(request.session.controller_model_name)</script>
 
-        <script src="{% static 'js/ChilliLibrary.js' %}"></script>
-        <script src="{% static 'js/PortalChilli.js' %}"></script>
+    <script src='/static/js/ChilliLibrary.js'></script>
+    <script src='/static/js/PortalChilli.js'></script>
+    <!--{% if request.session.controller_model_name %}-->
+      <!--&lt;!&ndash;{% if request.session.controller_model_name == 'swarm' %}&ndash;&gt;-->
+          <!--&lt;!&ndash;<script src='/static/js/PortalSwarm.js'></script>&ndash;&gt;-->
+      <!--&lt;!&ndash;{% elif request.session.controller_model_name == 'coovachilli' %}&ndash;&gt;-->
+    <!--&lt;!&ndash;<script>console.log(request.session.controller_model_name)</script>&ndash;&gt;-->
+
+        <!--&lt;!&ndash;<script src='/static/js/ChilliLibrary.js' %}"></script>&ndash;&gt;-->
+        <!--&lt;!&ndash;<script src="{% static 'js/PortalChilli.js' %}"></script>&ndash;&gt;-->
 
 
-      {% endif %}
-    {% endif %}
+
+      <!--{% endif %}-->
+    <!--{% endif %}-->
 </head>
 <body>
     <section id="wrapper" class="step-register">

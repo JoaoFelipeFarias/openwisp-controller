@@ -2,10 +2,10 @@ $(function() {
 
     chilliController.host = $('#controller_ip').val();
     var template_name = $('#template_name').val();
-    var template_name = $('#').val();
     console.log(chilliController.host);
     console.log(template_name);
 
+    $('#wrapper').append('<p>Loaded library</p>');
 
 
     //getting the csrf token for ajax POST requests

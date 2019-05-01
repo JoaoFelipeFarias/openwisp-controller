@@ -37,55 +37,6 @@ class RegisterTmp(View):
 logger = logging.getLogger(__name__)
 
 
-class PortalSignup(View):
-    def get(self, request):
-        print(request.session['template_name'])
-        request_well_formed = False
-        request_well_formed = RequestAnalyser.coovachilli_signup(request)
-        if request_well_formed:
-            controller = Controller.objects.filter(uuid=request.session['controller_id'])
-            if controller:
-                controller = controller[0]
-                Device.objects.register_device(mac=request.session['mac'],
-                                               user_agent=request.META['HTTP_USER_AGENT'])
-                request.session['controller_id'] = request.session['controller_id']
-                request.session['controller_model_name'] = \
-                    constants.ControllersTypes.choices[controller.controller_model - 1][1]
-                request.session['controllers_types'] = constants.ControllersTypes.choices
-                request.session['controller_ip'] = request.session['controller_ip']
-                request.session['redirect_url'] = controller.redirect_url
-                request.session['template_name'] = 'sign_up'
-                print(request.session['template_name'])
-                form = SignupForm()
-                return render(request, 'sign_up.html',{'form': form})
-            else:
-                logger.warning('No controller was found for uuid: %s', request.session['controller'])
-                form = SignupForm()
-                return render(request, 'sign_up.html', {'form': form})
-        else:
-            logger.error('No controller or mac was included on controller query params')
-            form = SignupForm()
-            return render(request, 'sign_up.html', {'form': form})
-
-    def post(self, request):
-        form = SignupForm(request.POST)
-        print('post')
-        print(form.is_valid())
-        if form.is_valid():
-            form.save()
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
-            # radius_auth = requests.post('http://192.168.1.41:8002',
-            #                             {'auth_user': username, 'auth_pass': raw_password, 'accept': 'Continue'})
-            if user is not None:
-                return HttpResponse(200)
-        else:
-            #print(request.session)
-            return render(request, 'sign_up.html', {'form': form})
-
-
 class RequestAnalyser():
     def coovachilli_login(request):
         if 'controller_id' in request.GET and 'mac' in request.GET:
@@ -128,13 +79,18 @@ class PortalLogin(View):
 
         request_has_session = RequestAnalyser.coovachilli_has_session(request)
 
-        if request_has_session:
+        print('request has session? ' + str(request_has_session))
+
+        if not request_has_session:
             form = LoginForm()
-            del request.session['template_name']
+            if 'template_name' in request.session:
+                del request.session['template_name']
             request.session['template_name'] = 'login'
             return render(request, 'login.html', {'form': form, })
 
         request_well_formed = RequestAnalyser.coovachilli_login(request)
+
+        print('request is well formed? ' + str(request_well_formed))
 
         if request_well_formed:
             controller = Controller.objects.filter(uuid=query_params['controller_id'])
@@ -184,6 +140,57 @@ class PortalLogin(View):
 
     def home(self, request):
         return render(request, 'home.html')
+
+
+class PortalSignup(View):
+    def get(self, request):
+        print(request.session['template_name'])
+        request_well_formed = False
+        request_well_formed = RequestAnalyser.coovachilli_signup(request)
+        if request_well_formed:
+            controller = Controller.objects.filter(uuid=request.session['controller_id'])
+            if controller:
+                controller = controller[0]
+                Device.objects.register_device(mac=request.session['mac'],
+                                               user_agent=request.META['HTTP_USER_AGENT'])
+                request.session['controller_id'] = request.session['controller_id']
+                request.session['controller_model_name'] = \
+                    constants.ControllersTypes.choices[controller.controller_model - 1][1]
+                request.session['controllers_types'] = constants.ControllersTypes.choices
+                request.session['controller_ip'] = request.session['controller_ip']
+                request.session['redirect_url'] = controller.redirect_url
+                request.session['template_name'] = 'sign_up'
+                print(request.session['template_name'])
+                form = SignupForm()
+                return render(request, 'sign_up.html',{'form': form})
+            else:
+                logger.warning('No controller was found for uuid: %s', request.session['controller'])
+                form = SignupForm()
+                return render(request, 'sign_up.html', {'form': form})
+        else:
+            logger.error('No controller or mac was included on controller query params')
+            form = SignupForm()
+            return render(request, 'sign_up.html', {'form': form})
+
+    def post(self, request):
+        form = SignupForm(request.POST)
+        print('post')
+        print(form.is_valid())
+        if form.is_valid():
+            form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(username=username, password=raw_password)
+            login(request, user)
+            # radius_auth = requests.post('http://192.168.1.41:8002',
+            #                             {'auth_user': username, 'auth_pass': raw_password, 'accept': 'Continue'})
+            if user is not None:
+                return HttpResponse(200)
+        else:
+            #print(request.session)
+            return render(request, 'sign_up.html', {'form': form})
+
+
 
 
 class PortalLogout(View):
