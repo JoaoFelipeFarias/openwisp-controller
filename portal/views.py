@@ -40,17 +40,14 @@ logger = logging.getLogger(__name__)
 class PortalSignup(View):
     def get(self, request):
         #print(request.session['template_name'])
-        request_well_formed = False
         is_coova_login = False
-        request_well_formed = RequestAnalyser.coovachilli_signup(request)
-        is_coova_login = request_well_formed
+        is_coova_login = RequestAnalyser.coovachilli_signup(request)
 
         if not is_coova_login:
             logger.warning('its not a coova login, attempting to register user anyway')
             form = SignupForm()
             return render(request, 'sign_up.html', {'form': form})
-
-        if request_well_formed:
+        else:
             controller = Controller.objects.filter(uuid=request.session['controller_id'])
             if controller:
                 controller = controller[0]
@@ -70,10 +67,6 @@ class PortalSignup(View):
                 logger.warning('No controller was found for uuid: %s', request.session['controller'])
                 form = SignupForm()
                 return render(request, 'sign_up.html', {'form': form})
-        else:
-            logger.error('No controller or mac was included on controller query params')
-            form = SignupForm()
-            return render(request, 'sign_up.html', {'form': form})
 
     def post(self, request):
         form = SignupForm(request.POST)
@@ -83,9 +76,10 @@ class PortalSignup(View):
             logger.warning('form is valid!')
             form.save()
             username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
-            user = authenticate(username=username, password=raw_password)
-            login(request, user)
+            raw_password = form.cleaned_data.get('password')
+            user = authenticate(username=username, password=raw_password, backend='django.contrib.auth.backends.ModelBackend')
+            login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+            logger.warning(user)
             # radius_auth = requests.post('http://192.168.1.41:8002',
             #                             {'auth_user': username, 'auth_pass': raw_password, 'accept': 'Continue'})
             if user is not None:
@@ -181,7 +175,7 @@ class PortalLogin(View):
             username = form.cleaned_data.get('auth_user')
             raw_password = form.cleaned_data.get('auth_pass')
             user = authenticate(request, username=username, password=raw_password, backend='django.contrib.auth.backends.ModelBackend)')
-            print(user)
+            logger.warning(user)
             if user is not None:
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
                 return HttpResponse(200)

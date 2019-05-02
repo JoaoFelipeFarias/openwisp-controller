@@ -1,5 +1,5 @@
 from django.forms import ModelForm
-from django.contrib.auth.forms import UserCreationForm
+from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Profile
 from radius.models import Radcheck
 from django import forms
@@ -12,50 +12,20 @@ my_default_errors = {
     'password_mismatch': 'As duas senhas não coincidem.'
 }
 
+User = get_user_model()
 
+class SignupForm(ModelForm):
 
-class SignupForm(UserCreationForm):
-    username = forms.CharField(
-        widget=forms.TextInput(
-            attrs={
-                'class': 'form-control',
-                'type': 'text',
-                'placeholder': 'Nome de Usuário',
-                'id': 'auth_user',
-            }
+    password2 = forms.PasswordInput()
 
-        ), label='',
-        error_messages=my_default_errors,
-    )
-
-    password1 = forms.CharField(
-        label='',
-        widget=forms.PasswordInput(attrs={
-            'class': 'form-control',
-            'type': 'password',
-            'placeholder': 'Senha',
-            'id': 'auth_pass'
-        }),
-        error_messages=my_default_errors,
-    )
-    password2 = forms.CharField(
-        label='',
-        widget=forms.PasswordInput(
-            attrs={
-                'class': 'form-control',
-                'type': 'password',
-                'placeholder': 'Confirmação da senha',
-                'id': 'auth_pass2',
-            }),
-        error_messages=my_default_errors,
-    )
+    class Meta:
+        model = User
+        fields = ('username', 'password')
 
     def save(self, commit=True):
         obj = super(SignupForm, self).save(commit=False)
 
-        #import pdb
-        #pdb.set_trace()
-        #user = get_user_model().objects.create_user()
+        obj.set_password(self.cleaned_data['password'])
 
         rad_user = Radcheck.objects.filter(username=self.cleaned_data['username'])
         if rad_user:
@@ -65,7 +35,7 @@ class SignupForm(UserCreationForm):
             username=self.cleaned_data['username'],
             attribute='Cleartext-Password',
             op=':=',
-            value=self.cleaned_data['password1'],
+            value=self.cleaned_data['password'],
         )
 
         new_rad_user.save()
@@ -74,6 +44,16 @@ class SignupForm(UserCreationForm):
             obj.save()
         return obj
 
+
+# class SignupForm(ModelForm):
+#     password2 = forms.PasswordInput()
+#
+#     class Meta(UserForm.Meta):
+#         fields = (UserForm.Meta.fields, 'password2',)
+#
+#     def save(self, commit=False):
+#         if self.cleaned_data['password'] == self.cleaned_data['password2']:
+#             UserForm.save(self)
 
 class LoginForm(forms.Form):
     auth_user = forms.CharField(
