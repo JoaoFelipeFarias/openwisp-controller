@@ -53,8 +53,8 @@ INSTALLED_APPS = [
     'rest_framework_gis',
     # channels
     'channels',
-    #'portal',
-    #'radius',
+    'portal',
+    'radius',
 ]
 
 EXTENDED_APPS = ('django_netjsonconfig', 'django_x509', 'django_loci',)

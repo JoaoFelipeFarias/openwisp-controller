@@ -16,6 +16,7 @@ from ..admin import MultitenantAdminMixin
 from .models import Config, Device, OrganizationConfigSettings, Template, Vpn
 
 
+
 class ConfigForm(AlwaysHasChangedMixin, AbstractConfigForm):
     class Meta(AbstractConfigForm.Meta):
         model = Config
