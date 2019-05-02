@@ -2,6 +2,7 @@ import logging
 from django.db import models
 
 from openwisp_users.models import User
+from openwisp_controller.config.models import Device as OpenWispDevice
 #from django.contrib.auth.models import User
 from radius.models import Radcheck
 from tests import constants
