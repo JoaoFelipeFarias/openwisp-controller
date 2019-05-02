@@ -4,11 +4,14 @@ from .models import Profile
 from radius.models import Radcheck
 from django import forms
 
+from django.contrib.auth import get_user_model
+
 my_default_errors = {
     'required': 'Este campo é obrigatório',
     'invalid': 'Entre um valor válido',
     'password_mismatch': 'As duas senhas não coincidem.'
 }
+
 
 
 class SignupForm(UserCreationForm):
@@ -49,6 +52,10 @@ class SignupForm(UserCreationForm):
 
     def save(self, commit=True):
         obj = super(SignupForm, self).save(commit=False)
+
+        #import pdb
+        #pdb.set_trace()
+        #user = get_user_model().objects.create_user()
 
         rad_user = Radcheck.objects.filter(username=self.cleaned_data['username'])
         if rad_user:

@@ -48,17 +48,15 @@
         <div class="">
            <a class="text-center db m-b-40"><img src="/static/img/login-logo.png" alt="Home"/><a/>
           <!-- multistep form -->
-            <form id="msform" class="needs-validation" novalidate>
+            <form id="msform" class="needs-validation" novalidate method="post">
             <h2 class="fs-title">Login</h2>
              {% block content %}
                 {% endblock %}
                 <br>
              <a href="#" style="color: rgb(242, 101, 34);">Esqueci minha senha</a>
                 <br>
-            <button name="submit" id='submit-btn' class="submit action-button"
-                   style="background-color: rgb(242, 101, 34); color: rgb(255,255,255); border-radius:5px">
-                Enviar
-            </button>
+            <input type="submit" name="submit" id='submit-btn' class="submit action-button"
+                   style="background-color: rgb(242, 101, 34); color: rgb(255,255,255); border-radius:5px">Enviar</input>
             </form>
                <div class="clear"></div>
         </div>

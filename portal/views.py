@@ -77,8 +77,8 @@ class PortalSignup(View):
 
     def post(self, request):
         form = SignupForm(request.POST)
-        logger.warning('post')
-        print(form.is_valid())
+        logger.warning('post was sent')
+        logger.warning(form.is_valid())
         if form.is_valid():
             logger.warning('form is valid!')
             form.save()
