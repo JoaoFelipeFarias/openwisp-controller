@@ -92,9 +92,18 @@ LANGUAGE_CODE = 'en-gb'
 USE_TZ = True
 USE_I18N = False
 USE_L10N = False
+
+
+
+
 STATIC_URL = '/static/'
+
+
+
+
 MEDIA_URL = '/media/'
 MEDIA_ROOT = '{0}/media/'.format(os.path.dirname(BASE_DIR))
+
 
 TEMPLATES = [
     {
@@ -155,6 +164,11 @@ LOGGING = {
         }
     }
 }
+
+PARENT_PATH = os.path.abspath(os.path.join(BASE_DIR, os.pardir))
+PARENT_PATH = os.path.abspath(os.path.join(PARENT_PATH, os.pardir))
+STATIC_ROOT = os.path.dirname(os.path.join(PARENT_PATH, 'static/'))
+print(STATIC_ROOT)
 
 # local settings must be imported before test runner otherwise they'll be ignored
 try:
