@@ -39,8 +39,12 @@ logger = logging.getLogger(__name__)
 
 class PortalSignup(View):
     def get(self, request):
-        print(request.session['template_name'])
+        #print(request.session['template_name'])
         request_well_formed = False
+        is_coova_login = False
+
+        is_coova_login = RequestAnalyser.coovachilli_signup(request)
+
         request_well_formed = RequestAnalyser.coovachilli_signup(request)
         if request_well_formed:
             controller = Controller.objects.filter(uuid=request.session['controller_id'])
