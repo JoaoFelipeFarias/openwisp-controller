@@ -62,7 +62,7 @@ class PortalSignup(View):
                 request.session['template_name'] = 'sign_up'
                 print(request.session['template_name'])
                 form = SignupForm()
-                return render(request, 'sign_up.html',{'form': form})
+                return render(request, 'sign_up.html', {'form': form})
             else:
                 logger.warning('No controller was found for uuid: %s', request.session['controller'])
                 form = SignupForm()

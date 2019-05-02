@@ -3,6 +3,7 @@ from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import Profile
 from radius.models import Radcheck
 from django import forms
+import logging
 
 from django.contrib.auth import get_user_model
 
@@ -13,14 +14,26 @@ my_default_errors = {
 }
 
 User = get_user_model()
+logger = logging.getLogger(__name__)
 
 class SignupForm(ModelForm):
 
-    password2 = forms.PasswordInput()
+    confirm_password = forms.CharField(widget=forms.PasswordInput())
 
     class Meta:
         model = User
         fields = ('username', 'password')
+
+    def clean(self):
+        cleaned_data = super(SignupForm, self).clean()
+        password = cleaned_data.get('password')
+        confirm_password = cleaned_data.get('confirm_password')
+
+        logging.warning(password)
+        logging.warning(confirm_password)
+
+        if password != confirm_password:
+            raise forms.ValidationError('passwords do not match')
 
     def save(self, commit=True):
         obj = super(SignupForm, self).save(commit=False)
