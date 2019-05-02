@@ -42,10 +42,14 @@ class PortalSignup(View):
         #print(request.session['template_name'])
         request_well_formed = False
         is_coova_login = False
-
-        is_coova_login = RequestAnalyser.coovachilli_signup(request)
-
         request_well_formed = RequestAnalyser.coovachilli_signup(request)
+        is_coova_login = request_well_formed
+
+        if not is_coova_login:
+            logger.warning('its not a coova login, attempting to register user anyway')
+            form = SignupForm()
+            return render(request, 'sign_up.html', {'form': form})
+
         if request_well_formed:
             controller = Controller.objects.filter(uuid=request.session['controller_id'])
             if controller:
@@ -73,9 +77,10 @@ class PortalSignup(View):
 
     def post(self, request):
         form = SignupForm(request.POST)
-        print('post')
+        logger.warning('post')
         print(form.is_valid())
         if form.is_valid():
+            logger.warning('form is valid!')
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
