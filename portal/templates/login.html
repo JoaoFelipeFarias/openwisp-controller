@@ -1,0 +1,7 @@
+{% extends 'loginbase.html' %}
+{% block content %}
+    {% csrf_token %}
+    {{ form.as_p }}
+    <a href="/portal/sign_up/" style="color: rgb(242, 101, 34);">Cadastro</a>
+
+{% endblock %}

@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+
+{% load static %}
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Elcoma Networks">
+    <meta name="author" content="Elcoma Networks">
+    <title>Elcoma - Vagalume</title>
+    <!-- Bootstrap Core CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Custom CSS -->
+    <link href="/static/css/style.css" rel="stylesheet">
+    <!-- color CSS -->
+    <link href="/static/css/default.css" id="theme" rel="stylesheet">
+    <!-- jQuery -->
+    <script src="/static/js/jquery.min.js"></script>
+    <script src='/static/js/jquery-3.2.1.js'></script>
+    <script src='/static/js/js.cookie.js'></script>
+    <script src='/static/js/jquery.validate.js'></script>
+    <!-- Bootstrap Core JavaScript -->
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link href="/static/css/register-steps/steps.css" rel="stylesheet">
+
+    <input type="hidden" id="controller_ip" value="{{request.session.controller_ip}}">
+    <input type="hidden" id="redirect_url" value="{{request.session.redirect_url}}">
+    <input type="hidden" id="template_name" value="{{request.session.template_name}}">
+
+    {% if request.session.controller_model_name %}
+      {% if request.session.controller_model_name == 'swarm' %}
+          <script src='/static/js/PortalSwarm.js'></script>
+      {% elif request.session.controller_model_name == 'coovachilli' %}
+    <script>console.log(request.session.controller_model_name)</script>
+
+        <script src="{% static 'js/ChilliLibrary.js' %}"></script>
+        <script src="{% static 'js/PortalChilli.js' %}"></script>
+
+
+      {% endif %}
+    {% endif %}
+</head>
+<body>
+    <section id="wrapper" class="step-register">
+      <div class="register-box">
+        <div class="">
+           <a class="text-center db m-b-40"><img src="/static/img/login-logo.png" alt="Home"/><a/>
+          <!-- multistep form -->
+            <form id="msform" class="needs-validation" novalidate>
+            <h2 class="fs-title">Login</h2>
+             {% block content %}
+                {% endblock %}
+                <br>
+             <a href="#" style="color: rgb(242, 101, 34);">Esqueci minha senha</a>
+                <br>
+            <button name="submit" id='submit-btn' class="submit action-button"
+                   style="background-color: rgb(242, 101, 34); color: rgb(255,255,255); border-radius:5px">
+                Enviar
+            </button>
+            </form>
+               <div class="clear"></div>
+        </div>
+      </div>
+    </section>
+</body>
+</html>
+
