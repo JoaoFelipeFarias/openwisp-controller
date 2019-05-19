@@ -26,6 +26,6 @@ class CoovaChilliOptionConfigAdmin(admin.ModelAdmin):
 
 admin.site.register(Controller)
 admin.site.register(Client)
-admin.site.register(Device)
+admin.site.register(PortalDevice)
 admin.site.register(AccessPoint)
 admin.site.register(CoovaChilliOptionConfig,CoovaChilliOptionConfigAdmin)

@@ -5,7 +5,9 @@ $(function() {
     //var template_name = $('#').val();
     console.log(chilliController.host);
     console.log(template_name);
-
+    var current_url = $("#current_url").text();
+    current_url = current_url.split("/")[2];
+    console.log(current_url);
 
 
     //getting the csrf token for ajax POST requests
@@ -28,10 +30,11 @@ $(function() {
     event.preventDefault();
     console.log('calling form')
 
+
     $.ajax({
                         type: "POST",
                         //url: '/portal/' + template_name + '/',
-                        url: '/portal/sign_up/',
+                        url: '/portal/' + current_url + '/',
                         data: $('#msform').serialize(),
                         success: function(msg){
                            console.log(msg);

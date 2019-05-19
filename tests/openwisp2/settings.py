@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'channels',
     'portal',
     'radius',
+    #'background_tasks',
 ]
 
 EXTENDED_APPS = ('django_netjsonconfig', 'django_x509', 'django_loci',)

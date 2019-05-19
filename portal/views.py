@@ -11,7 +11,8 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from portal.models import Controller, Device
+from portal.models import Controller, PortalDevice
+from openwisp_controller.config.models import *
 from tests import constants
 # Create your views here.
 
@@ -83,6 +84,7 @@ class PortalSignup(View):
             # radius_auth = requests.post('http://192.168.1.41:8002',
             #                             {'auth_user': username, 'auth_pass': raw_password, 'accept': 'Continue'})
             if user is not None:
+                logger.warning('user conseguiu logar depois de se registar')
                 return HttpResponse(200)
         else:
             #print(request.session)
@@ -132,13 +134,6 @@ class PortalLogin(View):
         logger.warning(query_params)
 
         request_has_session = RequestAnalyser.coovachilli_has_session(request)
-
-        # if request_has_session:
-        #
-        #     form = LoginForm()
-        #     del request.session['template_name']
-        #     request.session['template_name'] = 'login'
-        #     return render(request, 'login.html', {'form': form, })
 
         request_well_formed = RequestAnalyser.coovachilli_login(request)
 
@@ -195,6 +190,11 @@ class PortalLogin(View):
     def home(self, request):
         return render(request, 'home.html')
 
+class CoovaManagerView(View):
+    def get(self, request):
+        from django.core import serializers
+        data = serializers.serialize("python", PortalDevice.objects.all(), fields=('name', 'mac_address', 'last_ip'))
+        return render(request, 'coovamanager.html', {'data': data } )
 
 class PortalLogout(View):
     def get(self, request):

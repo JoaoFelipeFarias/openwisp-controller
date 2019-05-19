@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Management Page</title>
+    {% for instance in data %}
+    {% for field, value in instance.fields.items %}
+        {{ field }}: {{ value }}
+    {% endfor %}
+{% endfor %}
+</head>
+<body>
+
+</body>
+</html>

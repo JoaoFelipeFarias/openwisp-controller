@@ -20,6 +20,7 @@ urlpatterns = [
     url(r'^portal/login/', portal_views.PortalLogin.as_view()),
     url(r'^portal/logout/', portal_views.PortalLogout.as_view()),
     url(r'^portal/radius_return/', portal_views.PortalLogout.as_view()),
+    url(r'^portal/coova_manager/', portal_views.CoovaManagerView.as_view()),
     url(r'^tmp/', portal_views.RegisterTmp.as_view()),
 ]
 

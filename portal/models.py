@@ -13,6 +13,8 @@ class Profile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE)
     # radius_user = models.ForeignKey(Radcheck, on_delete=models.CASCADE)
 
+
+
 class DeviceManager(models.Manager):
     def register_device(self, user_agent, mac=None):
         if constants.user_agent_mandatory_string not in user_agent:
@@ -28,13 +30,17 @@ class DeviceManager(models.Manager):
 
         else:
             self.create(mac=mac,
-                        user_agent=user_agent)
 
-class Device(models.Model):
+
+                        user_agent=user_agent)
+class CoovaDevice(models.Model):
+    openwisp_device = models.ForeignKey(OpenWispDevice, blank=True, null=True, on_delete=models.DO_NOTHING)
+    is_coova = models.BooleanField(default=False)
+
+class PortalDevice(models.Model):
     mac = models.CharField(max_length=100, unique=True, blank=True, null=True)
     #user = models.ForeignKey(ControllerUser, on_delete=models.CASCADE, blank=True, null=True)
     user_agent = models.CharField(max_length=1000, blank=True)
-
     objects = DeviceManager()
 
     def __str__(self):
