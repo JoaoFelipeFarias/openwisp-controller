@@ -1,8 +1,8 @@
 $(function() {
 
     chilliController.host = $('#controller_ip').val();
-    var template_name = $('#template_name').val();
-    var template_name = $('#').val();
+    //var template_name = $('#template_name').val();
+    //var template_name = $('#').val();
     console.log(chilliController.host);
     console.log(template_name);
 
@@ -23,55 +23,20 @@ $(function() {
         }
     });
 
-    $('#msform').validate({
-           rules: {
-                  username :  {
-                        required: true,
-                        minlength: 2
-                        },
-                  auth_user :  {
-                        required: true,
-                        minlength: 2
-                        },
-                  auth_pass :  {
-                        required: true,
-                        minlength: 2
-                        },
-                  password1 : {
-                        required: true
-                        },
-                  password2 : {
-                        equalTo: '#auth_pass'
-                        },
-                },
-           messages:{
-                  username :  {
-                      required:'Por gentileza, preencha o campo.',
-                      minlength: 'O nome de usuário deverá ter mais de dois caracteres.'
-                      },
-                  auth_user : {
-                      required: 'Por gentileza, preencha o campo.',
-                      minlength: 'O nome de usuário deverá ter mais de dois caracteres.',
-                      },
-                  auth_pass : {
-                      required: 'Por gentileza, insira sua senha.'
-                      },
-                  password1 : {
-                      required: 'Por gentileza, insira sua senha'
-                      },
-                  password2 : {
-                      equalTo: 'As senhas devem coincidir'
-                      },
-           },
-           submitHandler : function (form){
-                $.ajax({
+
+    $("#msform").submit(function(event) {
+    event.preventDefault();
+    console.log('calling form')
+
+    $.ajax({
                         type: "POST",
-                        url: '/portal/' + template_name + '/',
+                        //url: '/portal/' + template_name + '/',
+                        url: '/portal/sign_up/',
                         data: $('#msform').serialize(),
                         success: function(msg){
                            console.log(msg);
                            //alert(chilliController.clientState);
-                           console.log('success');
+                           console.log('success login on server');
                            login_coova();
                            console.log(chilliController.clientState);
 
@@ -84,12 +49,78 @@ $(function() {
                                 console.log('entrei 404');
                                 $('#controller-form').append('<p> '+ msg.responseText + '<p/>');
                             }
-
-                        },
-                    });
-           }
-
-           });
+                         }
+    });
+});
+//
+//    $('#msform').validate({
+//           rules: {
+//                  username :  {
+//                        required: true,
+//                        minlength: 2
+//                        },
+//                  auth_user :  {
+//                        required: true,
+//                        minlength: 2
+//                        },
+//                  auth_pass :  {
+//                        required: true,
+//                        minlength: 2
+//                        },
+//                  password1 : {
+//                        required: true
+//                        },
+//                  password2 : {
+//                        equalTo: '#auth_pass'
+//                        },
+//                },
+//           messages:{
+//                  username :  {
+//                      required:'Por gentileza, preencha o campo.',
+//                      minlength: 'O nome de usuário deverá ter mais de dois caracteres.'
+//                      },
+//                  auth_user : {
+//                      required: 'Por gentileza, preencha o campo.',
+//                      minlength: 'O nome de usuário deverá ter mais de dois caracteres.',
+//                      },
+//                  auth_pass : {
+//                      required: 'Por gentileza, insira sua senha.'
+//                      },
+//                  password1 : {
+//                      required: 'Por gentileza, insira sua senha'
+//                      },
+//                  password2 : {
+//                      equalTo: 'As senhas devem coincidir'
+//                      },
+//           },
+//           submitHandler : function (form){
+//                $.ajax({
+//                        type: "POST",
+//                        //url: '/portal/' + template_name + '/',
+//                        url: '/portal/login/',
+//                        data: $('#msform').serialize(),
+//                        success: function(msg){
+//                           console.log(msg);
+//                           //alert(chilliController.clientState);
+//                           console.log('success login on server');
+//                           login_coova();
+//                           console.log(chilliController.clientState);
+//
+//
+//                        },
+//                        error: function(msg){
+//                        console.log(msg);
+//                        console.log(msg.status);
+//                            if (msg.status == 404){
+//                                console.log('entrei 404');
+//                                $('#controller-form').append('<p> '+ msg.responseText + '<p/>');
+//                            }
+//
+//                        },
+//                    });
+//           }
+//
+//           });
 
 
     console.log(chilliController.host)

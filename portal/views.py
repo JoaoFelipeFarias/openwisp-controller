@@ -51,8 +51,8 @@ class PortalSignup(View):
             controller = Controller.objects.filter(uuid=request.session['controller_id'])
             if controller:
                 controller = controller[0]
-                Device.objects.register_device(mac=request.session['mac'],
-                                               user_agent=request.META['HTTP_USER_AGENT'])
+                #Device.objects.register_device(mac=request.session['mac'],
+                #                               user_agent=request.META['HTTP_USER_AGENT'])
                 request.session['controller_id'] = request.session['controller_id']
                 request.session['controller_model_name'] = \
                     constants.ControllersTypes.choices[controller.controller_model - 1][1]
@@ -129,26 +129,33 @@ class PortalLogin(View):
             parsed = urlparse.urlparse(request.GET['loginurl'])
             query_params = urlparse.parse_qs(parsed.query)
 
+        logger.warning(query_params)
+
         request_has_session = RequestAnalyser.coovachilli_has_session(request)
 
-        if request_has_session:
-            form = LoginForm()
-            del request.session['template_name']
-            request.session['template_name'] = 'login'
-            return render(request, 'login.html', {'form': form, })
+        # if request_has_session:
+        #
+        #     form = LoginForm()
+        #     del request.session['template_name']
+        #     request.session['template_name'] = 'login'
+        #     return render(request, 'login.html', {'form': form, })
 
         request_well_formed = RequestAnalyser.coovachilli_login(request)
 
+        logger.warning('is request well formed???' + str(request_well_formed))
+
         if request_well_formed:
+
             controller = Controller.objects.filter(uuid=query_params['controller_id'])
             if controller:
                 controller = controller[0]
-                Device.objects.register_device(mac=query_params['mac'],
-                                               user_agent=request.META['HTTP_USER_AGENT'])
+                #Device.objects.register_device(mac=query_params['mac'],
+                #                               user_agent=request.META['HTTP_USER_AGENT'])
 
                 request.session['controller_id'] = query_params['controller_id']
                 request.session['controller_model_name'] = \
                     constants.ControllersTypes.choices[controller.controller_model - 1][1]
+                print(request.session['controller_model_name'])
                 request.session['controllers_types'] = constants.ControllersTypes.choices
                 request.session['mac'] = query_params['mac']
                 request.session['controller_ip'] = query_params['uamip']

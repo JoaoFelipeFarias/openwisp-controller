@@ -5,6 +5,7 @@ name = "pypi"
 
 [packages]
 openwisp_controller = {path = ".", editable = true}
+django-background-tasks = "*"
 
 [dev-packages]
 coverage = "*"

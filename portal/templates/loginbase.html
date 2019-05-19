@@ -29,18 +29,11 @@
     <input type="hidden" id="redirect_url" value="{{request.session.redirect_url}}">
     <input type="hidden" id="template_name" value="{{request.session.template_name}}">
 
-    {% if request.session.controller_model_name %}
-      {% if request.session.controller_model_name == 'swarm' %}
-          <script src='/static/js/PortalSwarm.js'></script>
-      {% elif request.session.controller_model_name == 'coovachilli' %}
-    <script>console.log(request.session.controller_model_name)</script>
-
-        <script src="{% static 'js/ChilliLibrary.js' %}"></script>
-        <script src="{% static 'js/PortalChilli.js' %}"></script>
+    <script src="{% static 'js/ChilliLibrary.js' %}"></script>
+    <script src="{% static 'js/PortalChilli.js' %}"></script>
 
 
-      {% endif %}
-    {% endif %}
+
 </head>
 <body>
     <section id="wrapper" class="step-register">
