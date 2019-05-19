@@ -33,9 +33,7 @@ class DeviceManager(models.Manager):
 
 
                         user_agent=user_agent)
-class CoovaDevice(models.Model):
-    openwisp_device = models.ForeignKey(OpenWispDevice, blank=True, null=True, on_delete=models.DO_NOTHING)
-    is_coova = models.BooleanField(default=False)
+
 
 class PortalDevice(models.Model):
     mac = models.CharField(max_length=100, unique=True, blank=True, null=True)
@@ -60,6 +58,36 @@ class Controller(models.Model):
 
     def __str__(self):
         return self.name
+
+class CoovaDevice(models.Model):
+    openwisp_device = models.ForeignKey(OpenWispDevice, blank=True, null=True, on_delete=models.DO_NOTHING)
+    is_coova = models.BooleanField(default=False)
+    my_controller = models.ForeignKey(Controller, on_delete=models.CASCADE)
+
+    def search_for_openwisp_device(mac, controller):
+        #print(mac)
+
+        mac_list = mac.split('-')
+        number = int(mac_list[-1], 16)
+        number = number - 1
+        last_hex = hex(number)
+        corrected_mac = mac_list
+        corrected_mac[-1] = str.upper(str(last_hex).split('x')[1])
+
+        final_mac = ''
+        for item in corrected_mac:
+            final_mac = final_mac + ':' + item
+        final_mac = final_mac[1:]
+        coovadevice = []
+
+        openwisp_device = OpenWispDevice.objects.filter(mac_address=final_mac)
+        if openwisp_device:
+            coovadevice = CoovaDevice.objects.filter(openwisp_device=openwisp_device[0])
+            if not coovadevice:
+                coovadevice = CoovaDevice.objects.create(openwisp_device=openwisp_device[0],\
+                                                         is_coova = True,\
+                                                         my_controller=controller)
+        return coovadevice
 
 class Client(models.Model):
     name = models.CharField(max_length=200)

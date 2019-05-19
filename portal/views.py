@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from portal.models import Controller, PortalDevice
+from portal.models import Controller, PortalDevice, CoovaDevice
 from openwisp_controller.config.models import *
 from tests import constants
 # Create your views here.
@@ -146,6 +146,10 @@ class PortalLogin(View):
                 controller = controller[0]
                 #Device.objects.register_device(mac=query_params['mac'],
                 #                               user_agent=request.META['HTTP_USER_AGENT'])
+                called = query_params['called']
+                logger.warning(called)
+                coova_device = CoovaDevice.search_for_openwisp_device(mac=called,controller=controller)
+
 
                 request.session['controller_id'] = query_params['controller_id']
                 request.session['controller_model_name'] = \
