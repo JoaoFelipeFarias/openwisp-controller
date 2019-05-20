@@ -11,7 +11,7 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from portal.models import Controller, PortalDevice, CoovaDevice
+from portal.models import Controller, PortalDevice, CoovaDevice, OpenWispDevice
 from openwisp_controller.config.models import *
 from tests import constants
 # Create your views here.
@@ -196,9 +196,15 @@ class PortalLogin(View):
 
 class CoovaManagerView(View):
     def get(self, request):
-        from django.core import serializers
-        data = serializers.serialize("python", PortalDevice.objects.all(), fields=('name', 'mac_address', 'last_ip'))
-        return render(request, 'coovamanager.html', {'data': data } )
+        #from django.core import serializers
+
+        from rest_framework import routers, serializers, viewsets
+
+        #data = serializers.serialize("python", CoovaDevice.objects.all(), fields=('name', 'mac_address', 'last_ip'))
+        from portal.serializers import serializers as portal_serializers
+        data = portal_serializers.CoovaDeviceSerializer(CoovaDevice.objects.all(), many=True)
+        logger.warning(data)
+        return render(request, 'coovamanager.html', {'data': data })
 
 class PortalLogout(View):
     def get(self, request):
