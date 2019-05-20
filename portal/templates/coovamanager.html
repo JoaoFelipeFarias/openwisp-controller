@@ -3,9 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <title>Management Page</title>
-        {{ data }}
+
+    <script src="/static/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+
 </head>
 <body>
+
+<table class="table table-bordered">
+        <tr>
+            <th>Device Name</th>
+            <th>Mac Address</th>
+            <th>Last IP</th>
+            <th>Coova admin</th>
+            <th>Last update</th>
+        </tr>
+
+        {% for item in data %}
+        <tr>
+            <td> {{ item.openwisp_device.name }} </td>
+            <td> {{ item.openwisp_device.mac_address }} </td>
+            <td> {{ item.openwisp_device.last_ip }} </td>
+            <td> {{ item.is_coova }} </td>
+        </tr>
+        {% endfor %}
+
+</table>
 
 </body>
 </html>

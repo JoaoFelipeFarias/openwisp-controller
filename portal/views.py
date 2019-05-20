@@ -202,7 +202,11 @@ class CoovaManagerView(View):
         #data = serializers.serialize("python", CoovaDevice.objects.all(), fields=('name', 'mac_address', 'last_ip'))
 
         serializer = portal_serializers.CoovaDeviceSerializer(CoovaDevice.objects.all(), many=True)
-        logger.warning(serializer.data)
+
+        for item in serializer.data:
+            logger.warning("serializer data")
+            logger.warning(item['openwisp_device']['last_ip'])
+
         return render(request, 'coovamanager.html', {'data': serializer.data })
 
 class PortalLogout(View):
