@@ -1,0 +1,3 @@
+chilli_query list
+00-56-CD-32-AF-F9 192.168.180.1 dnat 5ce19d5900000001 0 teste3 0/0 0/0 243454/0 3264917/0 0 1 0/0 0/0 http://captive.apple.com/hotspot-detect.html
+C0-3D-D9-18-D8-98 0.0.0.0 none 5ce0a33600000002 0 - 0/14460 0/3600 0/0 0/0 0 1 0/0 0/0 -
