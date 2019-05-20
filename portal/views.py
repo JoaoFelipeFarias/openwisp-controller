@@ -17,6 +17,8 @@ from tests import constants
 # Create your views here.
 
 from django.template.defaulttags import register
+from portal.serializers import serializers as portal_serializers
+from rest_framework import routers, serializers, viewsets
 
 
 @register.filter
@@ -197,14 +199,11 @@ class PortalLogin(View):
 class CoovaManagerView(View):
     def get(self, request):
         #from django.core import serializers
-
-        from rest_framework import routers, serializers, viewsets
-
         #data = serializers.serialize("python", CoovaDevice.objects.all(), fields=('name', 'mac_address', 'last_ip'))
-        from portal.serializers import serializers as portal_serializers
-        data = portal_serializers.CoovaDeviceSerializer(CoovaDevice.objects.all(), many=True)
-        logger.warning(data)
-        return render(request, 'coovamanager.html', {'data': data })
+
+        serializer = portal_serializers.CoovaDeviceSerializer(CoovaDevice.objects.all(), many=True)
+        logger.warning(serializer.data)
+        return render(request, 'coovamanager.html', {'data': serializer.data })
 
 class PortalLogout(View):
     def get(self, request):

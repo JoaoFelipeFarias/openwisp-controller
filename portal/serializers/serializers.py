@@ -5,21 +5,21 @@ from openwisp_controller.config.models import Device
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
-        fields = ('name','mac_address', 'last_ip')
+        fields = ('name','mac_address', 'last_ip',)
 
 
 class ControllerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Controller
-        fields = ('name','client')
+        fields = ('name','client',)
 
 class CoovaDeviceSerializer(serializers.ModelSerializer):
     openwisp_device = DeviceSerializer()
-    controller = ControllerSerializer()
+    my_controller = ControllerSerializer()
 
     class Meta:
         model = CoovaDevice
-        fields = ('is_coova')
+        fields = ('is_coova','openwisp_device', 'my_controller')
 
 
 '''
