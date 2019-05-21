@@ -3,11 +3,8 @@ import os
 from pexpect import pxssh
 from datetime import datetime
 
-@background(schedule=20)
-def coovadevicepool():
-
-
-
+@background(schedule=60)
+def coovadevicepool(): #criar um background manager, que pega todos os ips dos coova devices, e sai poolando uma por uma para pegar conectados.
     s = pxssh.pxssh()
     if not s.login('192.168.15.30', 'root', 'vagamesh'):
         print('login failed')
