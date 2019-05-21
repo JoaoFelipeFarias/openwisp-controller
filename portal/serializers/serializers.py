@@ -5,7 +5,7 @@ from openwisp_controller.config.models import Device
 class DeviceSerializer(serializers.ModelSerializer):
     class Meta:
         model = Device
-        fields = ('name','mac_address', 'last_ip',)
+        fields = ('name','mac_address', 'last_ip','modified')
 
 
 class ControllerSerializer(serializers.ModelSerializer):

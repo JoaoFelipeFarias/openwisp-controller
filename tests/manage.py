@@ -2,7 +2,7 @@
 import os
 import sys
 from threading import Thread
-import BackgroundThread
+from tests import BackgroundThread
 
 if __name__ == "__main__":
     os.environ.setdefault("DJANGO_SETTINGS_MODULE", 'openwisp2.settings')

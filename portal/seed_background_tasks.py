@@ -8,7 +8,7 @@ cheap_hash = lambda input: hashlib.md5(input).hexdigest()[:6]
 class BackgroundTaskCreator():
     global cheap_hash
     def create_tasks():
-        task_names = ['portal.tasks.test_read_file',
+        task_names = ['portal.tasks.coovadevicepool',
 
                       ]
 
