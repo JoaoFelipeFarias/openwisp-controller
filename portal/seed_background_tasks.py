@@ -1,9 +1,14 @@
 import hashlib
 from django.utils import timezone
 from datetime import timedelta
+import django
+
+django.setup()
 from background_task.models import Task
 
 cheap_hash = lambda input: hashlib.md5(input).hexdigest()[:6]
+
+
 
 class BackgroundTaskCreator():
     global cheap_hash

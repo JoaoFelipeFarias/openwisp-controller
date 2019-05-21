@@ -9,15 +9,16 @@ if __name__ == "__main__":
 
     from django.core.management import execute_from_command_line
 
-    execute_from_command_line(sys.argv)
-
-    #threading for coova pool tasks
     thread = Thread(target=BackgroundThread.process_tasks, args=[])
     thread.setDaemon(True)
     thread.start()
-
     from portal.seed_background_tasks import BackgroundTaskCreator
 
     BackgroundTaskCreator.create_tasks()
+
+    execute_from_command_line(sys.argv)
+
+    #threading for coova pool tasks
+
 
 

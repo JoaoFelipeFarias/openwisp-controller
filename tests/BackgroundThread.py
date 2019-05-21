@@ -9,6 +9,7 @@ def process_tasks():
     create_task = True
     while True:
         try:
+            time.sleep(10)
             if create_task:
                 create_task = False
                 task = subprocess.Popen('python3 manage.py process_tasks', shell=True)
