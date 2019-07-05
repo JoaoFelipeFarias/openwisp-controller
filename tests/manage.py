@@ -12,6 +12,7 @@ if __name__ == "__main__":
     thread = Thread(target=BackgroundThread.process_tasks, args=[])
     thread.setDaemon(True)
     thread.start()
+
     from portal.seed_background_tasks import BackgroundTaskCreator
 
     BackgroundTaskCreator.create_tasks()

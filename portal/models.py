@@ -89,6 +89,13 @@ class CoovaDevice(models.Model):
                                                          my_controller=controller)
         return coovadevice
 
+
+
+class CoovaDeviceStatus(models.Model):
+    coova_device = models.ForeignKey(CoovaDevice, on_delete=models.DO_NOTHING)
+    json = models.TextField()
+
+
 class Client(models.Model):
     name = models.CharField(max_length=200)
 

@@ -23,11 +23,9 @@ and the original URL.
 
 from datetime import datetime
 s = pxssh.pxssh()
-if not s.login('192.168.15.30', 'root', 'vagamesh'):
+if not s.login('192.168.20;204', 'root', 'vagamesh'):
     print('login failed')
 else:
-    while(True):
-
         dict = {}
         device_list = []
         print('ssh session connected successfully')

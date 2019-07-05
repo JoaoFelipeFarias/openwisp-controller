@@ -29,4 +29,6 @@ admin.site.register(Client)
 admin.site.register(PortalDevice)
 admin.site.register(AccessPoint)
 admin.site.register(CoovaDevice)
-admin.site.register(CoovaChilliOptionConfig,CoovaChilliOptionConfigAdmin)
+admin.site.register(CoovaDeviceStatus)
+admin.site.register(CoovaChilliOptionConfig, CoovaChilliOptionConfigAdmin)
+

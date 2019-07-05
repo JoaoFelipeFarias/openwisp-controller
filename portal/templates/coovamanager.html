@@ -10,7 +10,7 @@
 </head>
 <body>
 
-<table class="table table-bordered">
+<table class="table table-bordered" style="max-width:800px;">
         <tr>
             <th>Device Name</th>
             <th>Mac Address</th>
@@ -29,7 +29,44 @@
         </tr>
         {% endfor %}
 
+     <tr>
+
 </table>
+
+
+<table class="table table-bordered" style="max-width:800px;">
+        <tr>
+            <th>User Name</th>
+            <th>Mac Address</th>
+            <th>User IP</th>
+            <th>Connection Status</th>
+            <th>Connection Time (sec) / Maximum Connection Time (sec)</th>
+            <th>Input Octets / Max Input Octets</th>
+            <th>Output Octets / Max Output Octets</th>
+            <th>Max Total Octets</th>
+        </tr>
+        {% for item in data %}
+        <tr>
+            <td> Jf20 </td>
+            <td> 00-56-CD-32-AF-F9 </td>
+            <td> 192.168.180.2 </td>
+            <td> pass </td>
+            <td> 435 / 14460 </td>
+            <td> 3710312 / 0 </td>
+            <td> 6301216 / 0 </td>
+            <td> 0 </td>
+        </tr>
+        {% endfor %}
+
+
+     <tr>
+
+</table>
+
+
+
+
+
 
 </body>
 </html>
