@@ -3,11 +3,12 @@ import os
 from pexpect import pxssh
 from datetime import datetime
 from portal.models import CoovaDeviceStatus
+from openwisp_controller.config.models import Device
 
 @background(schedule=120)
 def coovadevicepool(): #criar um background manager, que pega todos os ips dos coova devices, e sai poolando uma por uma para pegar conectados.
     s = pxssh.pxssh()
-    if not s.login('192.168.20.204', 'root', 'vagamesh'):
+    if not s.login('192.168.15.30', 'root', 'vagamesh'):
         print('login failed')
     else:
 
@@ -30,7 +31,7 @@ def coovadevicepool(): #criar um background manager, que pega todos os ips dos c
                 file.write(line)
                 coovadevice[0].json = iter_output
                 coovadevice[0].save()
-                file.close()
+            file.close()
                 # if line == '':
                 #     break
                 # else:
