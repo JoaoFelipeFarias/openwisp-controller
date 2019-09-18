@@ -129,10 +129,8 @@ class CoovaChilliOptionConfig(models.Model):
         print(pprint.pprint(self.formatted_file))
         return pprint.pprint(self.formatted_file)
 
-#class NetworkPolicy(models.Model):
-
 class ConnectionTable(models.Model):
-    user = models.ForeignKey('User')
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     mac = models.CharField(max_length=17)
-    remaining_time = models.IntegerField()
-    client = models.ForeignKey('Client', on_delete=models.CASCADE)
+    remaining_time_seconds = models.IntegerField()
+    client = models.ForeignKey(Client, on_delete=models.CASCADE)
