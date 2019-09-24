@@ -1,7 +1,8 @@
 import requests
-
+import datetime
 import urllib.parse as urlparse
 import logging
+
 from django.contrib.auth import login, authenticate
 from django.shortcuts import render, redirect
 from django.views.generic import View
@@ -248,14 +249,18 @@ class ElcomaCoovaManager(View):
                 rad_acct_obj = Radacct.objects.filter(callingstationid=query_params['mac'])
                 print(rad_acct_obj.count())
                 rad_acct_obj = rad_acct_obj.order_by('-radacctid') #check if this solution works properly
+
                 #if there is no terminate cause, meaning NULL on acctterminatecause, check if last connection has a
                 #time difference bigger than the first Radreply with 'Session-Timeout' of that user. That means that
                 #more time has passed than allowed for his session time out and he should not be allowed. Otherwise,
-                #login the user returning the html with will communicate with coova.
+                #login the user returning the html witch will communicate with coova.
+                print(rad_acct_obj[0].acctterminatecause)
                 if rad_acct_obj[0].acctterminatecause == '':
                     print('is null')
+                    print(rad_acct_obj[0].acctstarttime)
+                    time_of_last_acct_record = datetime.datetime.fromtimestamp(rad_acct_obj[0].acctstarttime)
+                    print(time_of_last_acct_record.strftime("%c"))
 
-                print(rad_acct_obj[0].acctterminatecause)
                 return render(request, 'elcomacoovamanager.html')
 
 
