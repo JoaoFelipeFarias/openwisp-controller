@@ -1,0 +1,14 @@
+<style>
+#submit-btn {
+    display: none;
+}
+
+
+</style>
+{% extends 'loginbase.html' %}
+{% block content %}
+    {% csrf_token %}
+
+
+    <p>Coova Manager</p>
+{% endblock %}

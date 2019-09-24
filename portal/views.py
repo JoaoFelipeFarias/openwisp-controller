@@ -11,8 +11,9 @@ from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.utils.decorators import method_decorator
 
-from portal.models import Controller, PortalDevice, CoovaDevice, OpenWispDevice
+from portal.models import Controller, PortalDevice, CoovaDevice, OpenWispDevice, ConnectionTable
 from openwisp_controller.config.models import *
+from radius.models import Radacct, Radcheck
 from tests import constants
 # Create your views here.
 
@@ -186,6 +187,9 @@ class PortalLogin(View):
             logger.warning(user)
             if user is not None:
                 login(request, user, backend='django.contrib.auth.backends.ModelBackend')
+
+                #ConnectionTable.objects.create(user=user, mac=request.session['mac'], remaining_time_seconds=0, client=request.session)
+
                 return HttpResponse(200)
 
             else:
@@ -209,7 +213,54 @@ class CoovaManagerView(View):
 
         return render(request, 'coovamanager.html', {'data': serializer.data })
 
+class ElcomaCoovaManager(View):
+    def get(self, request):
+        coova_from_openwrt = RequestAnalyser.coovachilli_from_openwrt(request)
+        request_has_session = RequestAnalyser.coovachilli_has_session(request)
+        request_well_formed = RequestAnalyser.coovachilli_login(request)
+
+        if coova_from_openwrt:
+            query_params = request.GET
+        else:
+            parsed = urlparse.urlparse(request.GET['loginurl'])
+            query_params = urlparse.parse_qs(parsed.query)
+
+        if request_well_formed:
+
+            controller = Controller.objects.filter(uuid=query_params['controller_id'])
+
+            if controller:
+                controller = controller[0]
+                called = query_params['called']
+                request.session['controller_id'] = query_params['controller_id']
+                request.session['controller_model_name'] = \
+                    constants.ControllersTypes.choices[controller.controller_model - 1][1]
+                print(request.session['controller_model_name'])
+                request.session['controllers_types'] = constants.ControllersTypes.choices
+                request.session['mac'] = query_params['mac']
+                request.session['controller_ip'] = query_params['uamip']
+                request.session['redirect_url'] = controller.redirect_url
+                request.session['template_name'] = 'login'
+                print(request.session['controller_ip'])
+
+                #searching for mac on table:
+                print(query_params['mac'])
+                rad_acct_obj = Radacct.objects.filter(callingstationid=query_params['mac'])
+                print(rad_acct_obj.count())
+                rad_acct_obj = rad_acct_obj.order_by('-radacctid') #check if this solution works properly
+                #if there is no terminate cause, meaning NULL on acctterminatecause, check if last connection has a
+                #time difference bigger than the first Radreply with 'Session-Timeout' of that user. That means that
+                #more time has passed than allowed for his session time out and he should not be allowed. Otherwise,
+                #login the user returning the html with will communicate with coova.
+                if rad_acct_obj[0].acctterminatecause == '':
+                    print('is null')
+
+                print(rad_acct_obj[0].acctterminatecause)
+                return render(request, 'elcomacoovamanager.html')
+
+
 class PortalLogout(View):
     def get(self, request):
         logout(request)
         return redirect('/portal/login/')
+

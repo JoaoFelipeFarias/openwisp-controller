@@ -21,6 +21,7 @@ urlpatterns = [
     url(r'^portal/logout/', portal_views.PortalLogout.as_view()),
     url(r'^portal/radius_return/', portal_views.PortalLogout.as_view()),
     url(r'^portal/coova_manager/', portal_views.CoovaManagerView.as_view()),
+    url(r'^portal/elcoma_coova_manager/', portal_views.ElcomaCoovaManager.as_view()),
     url(r'^tmp/', portal_views.RegisterTmp.as_view()),
 ]
 

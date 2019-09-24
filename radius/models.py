@@ -19,6 +19,8 @@ class Radacct(models.Model):
     nasporttype = models.CharField(max_length=32, blank=True, null=True)
     acctstarttime = models.DateTimeField(blank=True, null=True)
     acctstoptime = models.DateTimeField(blank=True, null=True)
+    acctinterval = models.BigIntegerField(blank=True, null=True)
+    acctupdatetime = models.DateTimeField(blank=True, null=True)
     acctsessiontime = models.BigIntegerField(blank=True, null=True)
     acctauthentic = models.CharField(max_length=32, blank=True, null=True)
     connectinfo_start = models.CharField(max_length=50, blank=True, null=True)
@@ -29,11 +31,15 @@ class Radacct(models.Model):
     callingstationid = models.CharField(max_length=50, blank=True, null=True)
     acctterminatecause = models.CharField(max_length=32, blank=True, null=True)
     servicetype = models.CharField(max_length=32, blank=True, null=True)
-    xascendsessionsvrkey = models.CharField(max_length=10, blank=True, null=True)
     framedprotocol = models.CharField(max_length=32, blank=True, null=True)
     framedipaddress = models.GenericIPAddressField(blank=True, null=True)
-    acctstartdelay = models.IntegerField(blank=True, null=True)
-    acctstopdelay = models.IntegerField(blank=True, null=True)
+    framedipv6address = models.GenericIPAddressField(blank=True, null=True)
+    framedipv6prefix = models.CharField(max_length=50, blank=True, null=True)
+    framedinterfaceid = models.CharField(max_length=50, blank=True, null=True)
+    delegatedipv6prefix = models.CharField(max_length=50, blank=True, null=True)
+    #acctstartdelay = models.IntegerField(blank=True, null=True)
+    #acctstopdelay = models.IntegerField(blank=True, null=True)
+    #xascendsessionsvrkey = models.CharField(max_length=10, blank=True, null=True)
 
     class Meta:
         db_table = 'radacct'
@@ -47,6 +53,9 @@ class Radcheck(models.Model):
 
     class Meta:
         db_table = 'radcheck'
+
+    def __str__(self):
+        return 'Radcheck ' + self.username
 
 
 class Radgroupcheck(models.Model):
@@ -112,3 +121,6 @@ class Nas(models.Model):
 
    class Meta:
        db_table = 'nas'
+
+   def __str__(self):
+       return 'IP:' + self.nasname + ' device:' + self.shortname
