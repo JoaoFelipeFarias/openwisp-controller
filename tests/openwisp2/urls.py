@@ -17,7 +17,7 @@ urlpatterns = [
     url(r'', include('openwisp_controller.urls')),
     url(r'^$', redirect_view, name='index'),
     url(r'^portal/sign_up/', portal_views.PortalSignup.as_view()),
-    url(r'^portal/login/', portal_views.PortalLogin.as_view()),
+    url(r'^portal/login/', portal_views.PortalLogin.as_view(), name='portal_login'),
     url(r'^portal/logout/', portal_views.PortalLogout.as_view()),
     url(r'^portal/radius_return/', portal_views.PortalLogout.as_view()),
     url(r'^portal/coova_manager/', portal_views.CoovaManagerView.as_view()),

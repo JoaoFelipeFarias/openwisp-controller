@@ -1,5 +1,8 @@
 $(function() {
 
+    authenticate_client_on_load = $("#login_coova_input").val();
+    console.log(authenticate_client_on_load);
+
     chilliController.host = $('#controller_ip').val();
     //var template_name = $('#template_name').val();
     //var template_name = $('#').val();
@@ -8,6 +11,30 @@ $(function() {
     var current_url = $("#current_url").text();
     current_url = current_url.split("/")[2];
     console.log(current_url);
+
+    // coova elcoma page modifications
+    if (authenticate_client_on_load == 'True')
+    {
+        console.log('authenticating client')
+        username = $('#username').val();
+        password = $('#password').val();
+        console.log('username:' + username + 'password:' + password)
+        chilliController.refresh()
+        chilliController.logon(username,password);
+
+//        document.getElementById("client_state").innerHTML = "value is " + chilliController.clientState;
+//        //$('#client_state').val('value is ' + chilliController.clientState);
+//        $('#client_state').show();
+
+    } else if (authenticate_client_on_load == 'False'){
+        console.log('do not authenticate client on load');
+        url_params = $('#urlparams').val();
+        host = window.location.hostname;
+        port = window.location.port;
+        console.log('http://' + host + ':' + port + '/portal/login/' + url_params);
+        window.location.replace('http://' + host + ':' + port + '/portal/login/' + url_params);
+
+    }
 
 
     //getting the csrf token for ajax POST requests
@@ -66,34 +93,6 @@ $(function() {
 
     }
 
-//    function register_connection()
-//    {
-//        $.ajax({
-//                        type: "POST",
-//                        //url: '/portal/' + template_name + '/',
-//                        url: '/portal/' + 'register_connection' + '/',
-//                        data: $('#msform').serialize(),
-//                        success: function(msg){
-//                           console.log(msg);
-//                           //alert(chilliController.clientState);
-//                           console.log('success login on server');
-//                           login_coova();
-//                           register_connection();
-//                           console.log(chilliController.clientState);
-//
-//                        },
-//                        error: function(msg){
-//                        console.log(msg);
-//                        console.log(msg.status);
-//                            if (msg.status == 404){
-//                                console.log('entrei 404');
-//                                $('#controller-form').append('<p> '+ msg.responseText + '<p/>');
-//                            }
-//                         }
-//        });
-//    return
-//    }
-
 
     chilliController.onUpdate = updateUI;
 
@@ -114,3 +113,5 @@ $(function() {
         chilliController.logoff();
     }
 });
+
+

@@ -3,12 +3,19 @@
     display: none;
 }
 
-
 </style>
 {% extends 'loginbase.html' %}
 {% block content %}
     {% csrf_token %}
 
+<input type="hidden" id="login_coova_input" value="{{ data.login_coova }}">
+{% if data.login_coova == True %}
+    <input type="hidden" id="username" value="{{ data.username }}">
+    <input type="hidden" id="password" value="{{ data.password }}">
+{% endif %}
+
+<input type="hidden" id="urlparams" value="{{request.session.urlparams}}">
 
     <p>Coova Manager</p>
+    <p hidden id="client_state">test</p>
 {% endblock %}
